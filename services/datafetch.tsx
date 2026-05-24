@@ -1,7 +1,7 @@
 //This manages communication functions from front to back end
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const URL = "https://100.31.73.214:443/"
+const URL = "https://apirebottle.igrejapp.com.br/"
 const DEFMESSAGE = "Server Error, attempt again later";
 //const URL = "http://192.168.86.33:5000/"
 // const URL = "https://44.192.65.155:8443//";
