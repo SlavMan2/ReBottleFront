@@ -18,7 +18,7 @@ import { useLocalSearchParams } from 'expo-router';
 
 export default function QRPage() {
   const { uid,name } = useLocalSearchParams();
-  const qrValue = `http://192.168.23.173:5000/scanuser?id=${uid}`;
+  const qrValue = `https://apirebottle.igrejapp.com.br/scanuser?id=${uid}`;
   console.log("Crux sacra sit mihi lux non draco sit mihi dux vade retro satana nunquam suade mihi vana sunt mala quae libas ipse venena bibas")
   return (
     <View style={styles.container}>
