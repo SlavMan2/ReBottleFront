@@ -201,7 +201,7 @@ export default function LoginCafeEmailPage() {
         {/* FORGOT PASSWORD */}
         <TouchableOpacity
           onPress={() =>
-            redirect('/pages/requestcode')
+            redirect('/pages/accrec/requestcodeCafe')
           }
         >
           <Text style={styles.forgotText}>

@@ -192,7 +192,7 @@ export default function LoginEmailPage() {
         {/* FORGOT PASSWORD */}
         <TouchableOpacity
           onPress={() =>
-            redirect('/pages/requestcode')
+            redirect('/pages/accrec/requestcodeUser')
           }
         >
           <Text style={styles.forgotText}>
