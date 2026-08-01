@@ -1,5 +1,5 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import {
   StyleSheet,
   Text,
@@ -23,6 +23,7 @@ export default function LoginPage() {
   const [senha, setSenha] = React.useState('');
 
   const router = useRouter();
+
 
   async function Logfunc(router: any, senha: any, phone: any) {
     let handler = await logUserPhone({ phone, senha });
@@ -49,6 +50,7 @@ export default function LoginPage() {
       contentContainerStyle={styles.container}
       showsVerticalScrollIndicator={false}
     >
+
       {/* LOGO */}
       <View style={styles.logoContainer}>
         <View style={styles.logoBox}>
@@ -168,7 +170,7 @@ export default function LoginPage() {
             style={styles.primaryButton}
             onPress={() =>
               redirect(
-                '/pages/register/registercafePhone'
+                '/pages/register/registercafeEmail'
               )
             }
           >

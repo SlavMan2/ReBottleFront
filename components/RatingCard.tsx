@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, Image} from 'react-native';
 import { submitUserRatings } from '@/services/functionalities';
+import { useRouter } from 'expo-router';
 
 export default function RatingCard({ item }: any) {
   const [rating, setRating] = useState(0);
   const [desc, setDesc] = useState('');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const router = useRouter()
 
+  let redirect2 = (route:any) => {
+
+      router.push({pathname:route,params:{ uid: item.cafe_id}});
+  }
   const handleSubmit = async () => {
     if (rating === 0) return;
 
@@ -26,6 +32,7 @@ export default function RatingCard({ item }: any) {
     } else {
       console.log('Error:', res);
     }
+    
   };
 
   return (
@@ -53,19 +60,33 @@ export default function RatingCard({ item }: any) {
         onChangeText={setDesc}
       />
 
-
+      <Text></Text>
       <TouchableOpacity
         style={[
           styles.button,
-          (rating === 0 || loading || submitted) && { opacity: 0.5 }
+          (rating === 0 || loading || submitted || desc ==='') && { opacity: 0.5 }
         ]}
-        disabled={rating === 0 || loading || submitted}
+        disabled={rating === 0 || loading || submitted || desc ===''}
         onPress={handleSubmit}
       >
         <Text style={styles.buttonText}>
           {submitted ? 'Submitted ✅' : loading ? 'Sending...' : 'Submit'}
         </Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={[
+          styles.button,
+          (!submitted) && { opacity: 0.5 }
+        ]}
+        disabled={!submitted}
+        onPress={()=>redirect2('/pages/payment/payment')}
+      >
+        <Text style={styles.buttonText}>
+          Give this cafe a tip
+        </Text>
+      </TouchableOpacity>
+    
+      
     </View>
   );
 }

@@ -3,7 +3,7 @@ import { Redirect, useRouter, useFocusEffect} from 'expo-router';
 import { StyleSheet,Text, Image, Platform, Pressable, View } from 'react-native';
 import { logUserPhone } from '@/services/accounts';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import { ThemedView } from '@/components/themed-view';
 import OrIsIt from '@/components/OrIsIt';
 import { ThemedText } from '@/components/themed-text';
@@ -15,32 +15,50 @@ import QRCode from 'react-native-qrcode-svg';
 
 const sas = (router:any)=>{return router.replace('/pages/register')}
 import { useLocalSearchParams } from 'expo-router';
+import { getCafeOnboardingLink } from '@/services/functionalities';
 
 export default function QRPage() {
-  const { uid,name } = useLocalSearchParams();
+  const { uid,name,smessage } = useLocalSearchParams();
+  const [message, setMessage] = React.useState('');
+  const [linkmessage, setLinkMessage] = React.useState('');
+  const [loading, setLoading] = React.useState(true);
   //const qrValue = `https://apirebottle.igrejapp.com.br/scanuser?id=${uid}`;
-  const qrValue = `https://192.168.86.25:5000/scanuser?id=${uid}`;
+  useEffect(() => {
+      async function yahoo()
+      {
+        let resp = await getCafeOnboardingLink();
+        if(resp?.response == true){
+          setLinkMessage(resp.message)
+          setLoading(false)
+        } else {
+          setLinkMessage("Error")
+          setMessage(resp.message)
+        }
+      }
+      yahoo()
+    },[])
   console.log("Crux sacra sit mihi lux non draco sit mihi dux vade retro satana nunquam suade mihi vana sunt mala quae libas ipse venena bibas")
   return (
     <View style={styles.container}>
 
-      <Text style={styles.title}>QR Code</Text>
-      <Text style={styles.subtitle}>
-        Show your code or scan a café
-      </Text>
+      <Text style={styles.title}>Stripe account onboarding</Text>
+      
 
       <View style={styles.card}>
-
-        <QRCode value={qrValue} size={180} />
-
+        <Text style={styles.smessage}>{smessage}</Text>
+        {loading ? (
+          <Text style={styles.subtitle}>
+            Loading
+          </Text>) : 
+          (
+          <Text style={styles.subtitle}>
+            {linkmessage}
+          </Text>)
+        }
+        <OrIsIt text={message}/>
+  
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.id}>ReBottle ID: {uid}</Text>
-
-        <View style={styles.helperBtn}>
-          <Text style={styles.helperText}>
-            Show this to your café barista
-          </Text>
-        </View>
 
       </View>
     </View>
@@ -95,6 +113,11 @@ const styles = StyleSheet.create({
   id: {
     fontSize: 13,
     color: '#6e6e73',
+    marginTop: 4,
+  },
+  smessage: {
+    fontSize: 15,
+    color: '#c8c500',
     marginTop: 4,
   },
 

@@ -1,9 +1,9 @@
 //This manages communication functions from front to back end
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const URL = "https://apirebottle.igrejapp.com.br/"
+//const URL = "https://apirebottle.igrejapp.com.br/"
 const DEFMESSAGE = "Server Error, attempt again later";
-//const URL = "http://192.168.86.33:5000/"
+const URL = "http://192.168.86.25:5000/"
 // const URL = "https://44.192.65.155:8443//";
 
 //User only
@@ -264,7 +264,7 @@ try {
   if (otpassw!= senha){
     return "Both Passwords must match";
   }
-  const response = await fetch(URL + "register", {
+  const response = await fetch(URL + "register/cafe", {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -282,7 +282,7 @@ try {
   const data = await response.json();
 
   if (data["response"] === true) {
-    return true;
+    return data;
   } else {
     return data["message"];
   }

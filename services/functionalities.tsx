@@ -1,8 +1,8 @@
 //This manages communication functions from front to back end
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-//const URL = "http://192.168.86.21:5000/"
-const URL = "https://apirebottle.igrejapp.com.br/"
+const URL = "http://192.168.86.25:5000/"
+//const URL = "https://apirebottle.igrejapp.com.br/"
 const DEFMESSAGE = "Server Error, attempt again later";
 //const URL = "http://192.168.86.33:5000/"
 // const URL = "https://44.192.65.155:8443//";
@@ -168,6 +168,28 @@ export async function listBadgesBool()  {
   } else {
     return data["message"];
   }
+  } catch (error) {
+    console.error("Erro na requisição:", error);
+    return DEFMESSAGE;
+  }
+}
+export async function getCafeOnboardingLink()  {
+  let credentials = await AsyncStorage.getItem("tk");
+  try {
+    const response = await fetch(URL + "retreivelink", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        tk:credentials,
+      }),
+    });
+
+    const data = await response.json();
+
+    return data
   } catch (error) {
     console.error("Erro na requisição:", error);
     return DEFMESSAGE;

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Dimensions,
   TextInput,
+  ScrollView
 } from "react-native";
 import { CameraView, Camera } from "expo-camera";
 import { fetchCred } from "@/services/accounts";
@@ -74,11 +75,12 @@ export default function App() {
     // TODO: fetch dashboard data here
   }, []);
   const filteredData = data.filter((item) =>
-  item.cafe_name.toLowerCase().includes(search.toLowerCase()) ||
-  item.adress.toLowerCase().includes(search.toLowerCase()) ||
-  item.desc.toLowerCase().includes(search.toLowerCase())
+  (item.cafe_name||"").toLowerCase().includes(search.toLowerCase()) ||
+  (item.adress||"").toLowerCase().includes(search.toLowerCase()) ||
+  (item.desc||"").toLowerCase().includes(search.toLowerCase())
   );
   return (
+    <ScrollView>
   <View style={styles.container}>
     <View style={styles.header}>
       <Text style={styles.headerTitle}>Cafés ☕</Text>
@@ -100,7 +102,7 @@ export default function App() {
           key={index}
           cafe_name={item.cafe_name}
           adress={item.adress}
-          rating={item.rating.toFixed(1)}
+          rating={Number(item.rating||0).toFixed(1)}
           desc={item.desc}
           promotion={item.promotion}
           image={item.image}
@@ -111,6 +113,7 @@ export default function App() {
         />
       ))}
   </View>
+  </ScrollView>
 );
 }
 
