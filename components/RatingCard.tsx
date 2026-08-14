@@ -73,7 +73,7 @@ export default function RatingCard({ item }: any) {
           {submitted ? 'Submitted ✅' : loading ? 'Sending...' : 'Submit'}
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity
+      {/*<TouchableOpacity
         style={[
           styles.button,
           (!submitted) && { opacity: 0.5 }
@@ -84,7 +84,7 @@ export default function RatingCard({ item }: any) {
         <Text style={styles.buttonText}>
           Give this cafe a tip
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity>*/}
     
       
     </View>

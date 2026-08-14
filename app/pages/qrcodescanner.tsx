@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  ScrollView,
 } from "react-native";
 import { CameraView, Camera } from "expo-camera";
 import { fetchCred } from "@/services/accounts";
@@ -89,6 +90,7 @@ export default function App() {
   }
 
   return (
+    <ScrollView>
     <View style={styles.container}>
       <View style={styles.header}>
   <View style={styles.headerTop}>
@@ -160,6 +162,7 @@ export default function App() {
         </TouchableOpacity>
       )}
     </View>
+    </ScrollView>
   );
 }
 

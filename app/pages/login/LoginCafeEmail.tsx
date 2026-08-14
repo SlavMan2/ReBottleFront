@@ -109,9 +109,9 @@ export default function LoginCafeEmailPage() {
           </Text>
         )}
                   
-        {!!links && (
+        {/*!!links && (
           <Text style={styles.stripelinkText}> This is your Stripe Activation Link, you must use it to receive your customers' tips: {links}, (If you lose access to the link you can still try again on the profile tab)</Text>
-        )}
+        )*/}
         {/* EMAIL */}
         <View style={styles.inputWrapper}>
           <Ionicons

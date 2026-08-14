@@ -171,13 +171,13 @@ export default function HomeScreen() {
       <Text>{'>'}</Text>
     </TouchableOpacity>
 
-      {iscafe && <TouchableOpacity
+      {/*iscafe && <TouchableOpacity
       style={styles.menuItem}
       onPress={() => redirect2('/pages/payment/striperetreival',id,nome)}
       >
       <Text style={styles.menuText}>Stripe OnBoarding</Text>
       <Text>{'>'}</Text>
-    </TouchableOpacity>}
+    </TouchableOpacity>*/}
 
     <TouchableOpacity
       style={styles.menuItem}

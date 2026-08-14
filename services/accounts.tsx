@@ -1,9 +1,9 @@
 //This manages communication functions from front to back end
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-//const URL = "https://apirebottle.igrejapp.com.br/"
+const URL = "https://apirebottle.igrejapp.com.br/"
 const DEFMESSAGE = "Server Error, attempt again later";
-const URL = "http://192.168.86.25:5000/"
+//const URL = "http://192.168.86.24:5000/"
 // const URL = "https://44.192.65.155:8443//";
 
 //User only
@@ -122,7 +122,10 @@ export async function logUserPhone({phone, senha}:{phone:string, senha:string}) 
 
     if (data["response"] === true) {
       await AsyncStorage.setItem("tk", data['token']);
-      await AsyncStorage.setItem("cafe", 'false');
+      await AsyncStorage.setItem("ptk", data['pertoken']);
+      await AsyncStorage.setItem("iscafe", 'false');
+      await AsyncStorage.setItem("id", String(data.id));
+
       
       return data;
     } else {
@@ -153,7 +156,8 @@ export async function logUserEmail({email, senha}:{email:string, senha:string}) 
 
     if (data["response"] === true) {
       await AsyncStorage.setItem("tk", data['token']);
-      await AsyncStorage.setItem("cafe", 'false');
+      await AsyncStorage.setItem("ptk", data['pertoken']);
+      await AsyncStorage.setItem("iscafe", 'false');
       return data;
     } else {
       return data["message"];
@@ -344,7 +348,9 @@ export async function logCafePhone({phone, senha}:{phone:string, senha:string}) 
 
     if (data["response"] === true) {
       await AsyncStorage.setItem("tk", data['token']);
-      await AsyncStorage.setItem("cafe", 'true');
+      await AsyncStorage.setItem("ptk", data['pertoken']);
+      await AsyncStorage.setItem("iscafe", 'true');
+      await AsyncStorage.setItem("id", String(data.id));
       return data;
     } else {
       return data["message"];
@@ -373,8 +379,11 @@ export async function logCafeEmail({email, senha}:{email:string, senha:string}) 
     const data = await response.json();
 
     if (data["response"] === true) {
+      await AsyncStorage.setItem("ptk", data['pertoken']);
       await AsyncStorage.setItem("tk", data['token']);
-      await AsyncStorage.setItem("cafe", 'true');
+      await AsyncStorage.setItem("iscafe", 'true');
+      await AsyncStorage.setItem("id", String(data.id));
+      
       return data;
     } else {
       return data["message"];
@@ -449,6 +458,7 @@ export async function sendCodeCafe({Ident,Mean}:{Ident:string, Mean:string})  {
 //Both
 export async function sessionCheck()  {
   let credentials = await AsyncStorage.getItem("tk");
+  let ptk = await AsyncStorage.getItem("ptk");
   try {
   const response = await fetch(URL + "session/check", {
     method: "POST",
@@ -457,14 +467,23 @@ export async function sessionCheck()  {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      tk:credentials
+      tk:credentials,
+      pertk:ptk
     }),
   });
 
   const data = await response.json();
 
   if (data['response'] === true) {
-    return true;
+    if (data?.ntoken == ""){
+      return true;
+    }
+    else
+    {
+      await AsyncStorage.setItem("tk", data['ntoken']);
+      return true;
+    }
+    
   } else {
     return false;
   }
@@ -484,7 +503,9 @@ export async function fetchCred()  {
     let creds = await AsyncStorage.getItem("tk");
     let uid = await AsyncStorage.getItem("id");
     let iscafe = await AsyncStorage.getItem("iscafe");
+    console.log("Issues with the thing")
     let sesscheck = await sessionCheck()
+    console.log(sesscheck)
     if (sesscheck == false)
     {
       return [false];

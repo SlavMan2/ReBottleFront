@@ -104,9 +104,9 @@ export default function RegisterCafeEmail() {
       ) {
         router.push({
           pathname: '/pages/login/LoginCafeEmail',
-          params: {
+          /*params: {
             links: (handler.url||"joshua and the coconut tree"),
-          },
+          },*/
         });
 
         return;
