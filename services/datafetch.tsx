@@ -3,14 +3,24 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const URL = "https://apirebottle.igrejapp.com.br/"
 const DEFMESSAGE = "Server Error, attempt again later";
-//const URL = "http://192.168.86.33:5000/"
+//const URL = "http://192.168.86.24:5000/"
 // const URL = "https://44.192.65.155:8443//";
 
 
 
 export async function getUserData({id}:{id:string}) {
 try {
-  const response = await fetch(URL + "getuserdata?id="+id);
+  let credentials = await AsyncStorage.getItem("tk");
+  const response = await fetch(URL + "getuserdata", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        tk:credentials,
+      }),
+    });
 console.log("AA")
   console.log(id)
   const data = await response.json();

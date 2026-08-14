@@ -86,14 +86,30 @@ export default function HomeScreen() {
           let instan:any = await getCafeHistory()
           setListInter(instan.instances)
         }
-        let badge:any = await listBadges()
-        let bl = badge.list
-        console.log(bl)
-        setBadgeNum(badge.amount_for_next)
-        setBadgeLeft(badge.progress_for_next)
-        if (bl.length   > 0){
+        
+        try
+        {
+          let badge:any = await listBadges()
+          let bl = badge.list
+          console.log(bl)
+          setBadgeNum(badge.amount_for_next)
+          setBadgeLeft(badge.progress_for_next)
+          if (bl.length   > 0){
           setBadge(bl[bl.length  -1][1])
+          }
         }
+        catch
+        {
+          let badge:any = await listBadges()
+          let bl = badge.list
+          console.log(bl)
+          setBadgeNum(badge.amount_for_next)
+          setBadgeLeft(badge.progress_for_next)
+          if (bl.length   > 0){
+          setBadge(bl[bl.length  -1][1])
+          }
+        }
+          
         
       }
       

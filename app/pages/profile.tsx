@@ -12,6 +12,7 @@ import { fetchCred, logOut } from '@/services/accounts';
 import { getCafeData, getCafeHistory, getUserData, getUserHistory } from '@/services/datafetch';
 import { listBadges } from '@/services/functionalities';
 import OrIsIt from '@/components/OrIsIt';
+import { isColor } from 'react-native-reanimated';
 
 export default function HomeScreen() {
   const [nome, setTextInputValue] = React.useState('');
@@ -30,7 +31,7 @@ export default function HomeScreen() {
   let redirect2 = (route:any,id:any,name:any) => {
     router.push({pathname:route,params:{ uid: id,name:name }});
   }
-
+  
   useEffect(() => {
     async function yahoo()
     {
@@ -169,6 +170,14 @@ export default function HomeScreen() {
       <Text style={styles.menuText}>Settings</Text>
       <Text>{'>'}</Text>
     </TouchableOpacity>
+
+      {/*iscafe && <TouchableOpacity
+      style={styles.menuItem}
+      onPress={() => redirect2('/pages/payment/striperetreival',id,nome)}
+      >
+      <Text style={styles.menuText}>Stripe OnBoarding</Text>
+      <Text>{'>'}</Text>
+    </TouchableOpacity>*/}
 
     <TouchableOpacity
       style={styles.menuItem}

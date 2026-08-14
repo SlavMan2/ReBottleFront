@@ -1,5 +1,5 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import {
   StyleSheet,
   View,
@@ -25,7 +25,7 @@ export default function LoginCafeEmailPage() {
     React.useState('');
 
   const router = useRouter();
-
+  const { links } = useLocalSearchParams();
   async function Logfunc(
     router: any,
     senha: any,
@@ -108,7 +108,10 @@ export default function LoginCafeEmailPage() {
             {message}
           </Text>
         )}
-
+                  
+        {/*!!links && (
+          <Text style={styles.stripelinkText}> This is your Stripe Activation Link, you must use it to receive your customers' tips: {links}, (If you lose access to the link you can still try again on the profile tab)</Text>
+        )*/}
         {/* EMAIL */}
         <View style={styles.inputWrapper}>
           <Ionicons
@@ -208,17 +211,6 @@ export default function LoginCafeEmailPage() {
             Forgot My Password
           </Text>
         </TouchableOpacity>
-
-        {/* BACK BUTTON */}
-        <TouchableOpacity
-          onPress={() =>
-            redirect('/pages/login/LoginCafe')
-          }
-        >
-          <Text style={styles.backText}>
-            Back to Café Login
-          </Text>
-        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -305,6 +297,11 @@ const styles = StyleSheet.create({
 
   errorText: {
     color: '#ff4b4b',
+    textAlign: 'center',
+    marginBottom: 12,
+  },
+  stripelinkText: {
+    color: '#376e00',
     textAlign: 'center',
     marginBottom: 12,
   },

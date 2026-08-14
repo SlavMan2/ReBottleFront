@@ -101,8 +101,11 @@ export default function HomeScreen() {
                       let udata = await getUserData({id})
                       console.log(udata)
                       setNomes(udata.name)
-                    
+                      setNomeNew(udata.name)
                       setuimg(udata.image)
+                      setuimgNew(udata.image)
+                      setEmail(udata.email)
+                      setPhone(udata.phone_n)
           //
         } else 
         {
@@ -111,11 +114,17 @@ export default function HomeScreen() {
                       setId(id)
                       let udata:any = await getCafeData({id})
                       setNomes(udata.name)
+                      setNomeNew(udata.name)
                       setOldDesc(udata.desc)
                       setOldPromotion(udata.promotion)
                       setuimg(udata.image)
+                      setuimgNew(udata.image)
                       setRating(Number(udata.rating || 0))
                       setAdress(udata.adress)
+                      setAdressNew(udata.adress)
+                      setDescNew(udata.desc)
+                      setPromotionNew(udata.promotion)
+                      setPhone(udata.phone_n)
           //
         }
       }
@@ -195,14 +204,14 @@ export default function HomeScreen() {
           onChangeText={setDescNew}
           placeholder="Enter your cafe's short description"
         />}
-        <Text style={styles.label}>Email</Text>
-        <TextInput
+        {!iscafe && <Text style={styles.label}>Email</Text>}
+        {!iscafe && <TextInput
           style={styles.input}
           value={email}
           onChangeText={setEmail}
           placeholder="Enter your email"
           keyboardType="email-address"
-        />
+        />}
 
         <Text style={styles.label}>Phone</Text>
         <TextInput

@@ -36,8 +36,10 @@ export default function RegisterCafeEmail() {
 
   let redirect = (route: any) => {
     router.replace(route);
-  };
-
+  }
+  let redirect2 = (route:any,id:any) => {
+    router.push({pathname:route,params:{ uid: id }});
+  }
   async function handleRegister(
     spcode: string,
     nome: string,
@@ -100,9 +102,12 @@ export default function RegisterCafeEmail() {
         handler?.response === true ||
         handler === true
       ) {
-        router.replace(
-          '/pages/login/LoginCafeEmail'
-        );
+        router.push({
+          pathname: '/pages/login/LoginCafeEmail',
+          /*params: {
+            links: (handler.url||"joshua and the coconut tree"),
+          },*/
+        });
 
         return;
       }
@@ -301,7 +306,7 @@ export default function RegisterCafeEmail() {
         </View>
 
         {/* PHONE REGISTER */}
-        <TouchableOpacity
+        {/*<TouchableOpacity
           style={styles.secondaryButton}
           onPress={() =>
             redirect(
@@ -322,7 +327,7 @@ export default function RegisterCafeEmail() {
           >
             Register with Phone Number
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity>*/}
 
         {/* LOGIN */}
         <TouchableOpacity
