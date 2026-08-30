@@ -228,7 +228,7 @@ export default function LoginCafePhonePage() {
             style={styles.primaryButton}
             onPress={() =>
               redirect(
-                '/pages/register/registercafe'
+                '/pages/register/registercafeEmail'
               )
             }
           >
