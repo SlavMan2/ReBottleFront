@@ -20,7 +20,9 @@ export default function HomeScreen() {
   const [id,setId] = React.useState(0);
   const [inLeaderboard,setInLeaderboard] = React.useState(false);
   const [cupamount,setCupAmount] = React.useState(0);
+  const [placement,setPlacement] = React.useState(0);
   const [errmsg, setErrMsg] = React.useState('');
+  const [iscafe, setIsCafe] = React.useState('false');
   const router = useRouter();
   let redirect = (route:any) => {
     router.push(route);
@@ -39,9 +41,6 @@ export default function HomeScreen() {
         let handler = await fetchLeaderboardData();
         try {
 
-          if (!handler.me) {
-            setInLeaderboard(true)
-          }
           const formatted = handler.userl.map((u: any) => ({
             id: u.id,
             name: u.name,
@@ -50,11 +49,13 @@ export default function HomeScreen() {
           }));
 
           setListInter(formatted);
-
+          setIsCafe(response[3])
           if (handler.me && handler.me.length >=3) {
+            setInLeaderboard(true)
             setCupAmount(handler.me[2]);
             setUserImg(handler.me[1]);
             setTextInputValue(handler.me[0]);
+            setPlacement(handler.me[3]);
           }
 
           setId(response[2]);
@@ -69,13 +70,13 @@ export default function HomeScreen() {
   }, [])
   const top3:any = listInter.slice(0, 3);
   const rest = listInter.slice(3);
+
   
   return (
      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 
   {/* TITLE */}
-  <Text style={styles.title}>Leaderboard 🏆</Text>
-  <Text style={styles.subtitle}>Region</Text>
+  <Text style={styles.title}>{iscafe=="true" && <Text>Cafe </Text>}Leaderboard 🏆</Text>
 
   {/* PODIUM */}
   <View style={styles.podiumRow}>
@@ -145,12 +146,37 @@ export default function HomeScreen() {
           </View>
 
           <View style={{ alignItems: 'flex-end' }}>
-            <Text style={styles.points}>{user.cups_saved} pts</Text>
+            <Text style={styles.points}>{user.cups_saved * 10} pts</Text>
             <Text style={styles.sub}>{user.cups_saved} cups</Text>
           </View>
         </TouchableOpacity>
       );
     })}
+    <View>
+      <Text>{"\n"}</Text>
+        {inLeaderboard && 
+      
+        <TouchableOpacity
+            style={styles.row}
+            onPress={() => {/*redirect2('/pages/profile', user.id, user.name)*/ console.log("Done Later :)")}}
+          >
+            <Text style={styles.rank}>#{placement}</Text>
+
+            <Image source={{ uri: userImg }} style={styles.avatarSmall} />
+
+            <View style={{ flex: 1 }}>
+              <Text style={styles.name}>{nome}</Text>
+            {/*<Text style={styles.location}>Texas</Text>*/}
+            </View>
+
+            <View style={{ alignItems: 'flex-end' }}>
+              <Text style={styles.points}>{cupamount * 10} pts</Text>
+              <Text style={styles.sub}>{cupamount} cups</Text>
+            </View>
+          </TouchableOpacity>
+      }
+    </View>
+    
   </View>
 
 </ScrollView>

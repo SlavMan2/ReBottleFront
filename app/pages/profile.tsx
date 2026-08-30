@@ -40,7 +40,7 @@ export default function HomeScreen() {
         redirect('/pages/login')
       } else {
         console.log(response)
-        if (response[3] == '0')
+        if (response[3] == "false")
         {
           console.log("A")
             setIsCafe(false)
@@ -101,6 +101,7 @@ export default function HomeScreen() {
       <>
         <Text style={styles.location}>📍 {adress}</Text>
         <Text style={styles.location}>⭐ {rating.toFixed(1)}</Text>
+        
       </>
     )}
 

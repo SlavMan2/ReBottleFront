@@ -43,8 +43,9 @@ export default function HomeScreen() {
         redirect('/pages/login')
       } else {
         console.log(response)
-        if (response[3] == '0')
+        if (response[3] == "false")
         {
+          console.log("WAAWAWAAW")
           console.log("A")
             setIsCafe(false)
             let id = response[2]
@@ -100,7 +101,9 @@ export default function HomeScreen() {
         }
         catch
         {
-          let badge:any = await listBadges()
+          try 
+          {
+            let badge:any = await listBadges()
           let bl = badge.list
           console.log(bl)
           setBadgeNum(badge.amount_for_next)
@@ -108,6 +111,11 @@ export default function HomeScreen() {
           if (bl.length   > 0){
           setBadge(bl[bl.length  -1][1])
           }
+          } catch 
+          {
+            console.log("WHATS GOING ON")
+          }
+          
         }
           
         
@@ -217,15 +225,15 @@ export default function HomeScreen() {
         <Text style={styles.sectionTitle}>Your Stats</Text>
 
         <View style={styles.statsGrid}>
-          <View style={styles.statBox}>
+          <View style={styles.statBox2}>
             <Text style={styles.statNumber}>{cups}</Text>
             <Text>Total Cups</Text>
           </View>
 
-          <View style={styles.statBox}>
+          {/*<View style={styles.statBox}>
             <Text style={styles.statNumber}>{cups}</Text>
             <Text>Cups Saved</Text>
-          </View>
+          </View>*/}
 
           <View style={styles.statBox}>
             <Text style={styles.statNumber}>{cups*20} Grams</Text>
@@ -447,6 +455,13 @@ card2: {
     marginBottom: 10,
   },
 
+  statBox2: {
+    width: '100%',
+    backgroundColor: 'white',
+    padding: 15,
+    borderRadius: 15,
+    marginBottom: 10,
+  },
 
 
   activityRow: {

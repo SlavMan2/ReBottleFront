@@ -57,7 +57,7 @@ export default function HomeScreen() {
           redirect('/pages/login')
         } else {
           console.log(response)
-          if (response[3] == '0')
+          if (response[3] == "false")
           {
             console.log("A")
               setIsCafe(false)

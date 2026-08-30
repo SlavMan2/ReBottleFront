@@ -48,9 +48,35 @@ export default function HomeScreen() {
   const handleSave = async () => {
     setLoading(true);
     let res;
+    if (phone)
+    {
+      const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+      
+      if (!phoneRegex.test(phone))
+      {
+        setErrMsg(
+          'Please enter a valid phone format'
+        );
+        setLoading(false)
+        return;
+      }
+    }
+    if (email)
+    {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email))
+      {
+        setErrMsg(
+          'Please enter a valid email format'
+        );
+        setLoading(false)
+        return;
+      }
+    }
     if (iscafe == false){
       const nome = nomenew
       const image = userimgnew;
+      
       res = await updateUser({
         nome,
         email,
@@ -92,7 +118,7 @@ export default function HomeScreen() {
         redirect('/pages/login')
       } else {
         console.log(response)
-        if (response[3] == '0')
+        if (response[3] == "false")
         {
           console.log("A")
                         setIsCafe(false)
@@ -125,6 +151,7 @@ export default function HomeScreen() {
                       setDescNew(udata.desc)
                       setPromotionNew(udata.promotion)
                       setPhone(udata.phone_n)
+                      
           //
         }
       }
