@@ -37,7 +37,7 @@ export default function App() {
       if(response[0] == false){
         redirect('/pages/login')
       } 
-      if (response[3] == "1"){
+      if (response[3] == "true"){
         redirect('/')
       }
       const id = response[2]

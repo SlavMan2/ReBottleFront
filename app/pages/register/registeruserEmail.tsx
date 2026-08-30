@@ -40,6 +40,15 @@ export default function RegisterUserEmail() {
     senha: string,
     email: string
   ) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email))
+    {
+      setMessage(
+        'Please enter a valid email format'
+      );
+
+      return;
+    }
     let hasn = false;
     let hass = false;
     let hasm = false;

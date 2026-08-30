@@ -32,7 +32,7 @@ export default function RequestCodeCafe() {
 
     if (handler.response === true) {
       return router.replace('/pages/accrec/changepasswCafe');
-    }
+    } 
 
     console.log(handler);
     setErrMsg(handler);

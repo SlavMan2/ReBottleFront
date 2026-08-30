@@ -1,9 +1,10 @@
 //This manages communication functions from front to back end
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const URL = "https://apirebottle.igrejapp.com.br/"
+//const URL = "https://apirebottle.igrejapp.com.br/"
 const DEFMESSAGE = "Server Error, attempt again later";
-//const URL = "http://192.168.86.24:5000/"
+//const URL = "http://192.168.86.21:5000/"
+const URL = "https://apirebottle.igrejapp.com.br/";
 // const URL = "https://44.192.65.155:8443//";
 
 
@@ -37,8 +38,18 @@ console.log("AA")
 }
 export async function getCafeData({id}:{id:string}) {
 try {
+  let credentials = await AsyncStorage.getItem("tk");
   console.log("AAD")
-  const response = await fetch(URL + "getcafedata?id="+id);
+  const response = await fetch(URL + "getcafedata", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        tk:credentials,
+      }),
+    });
   console.log("AA")
   console.log(id)
   const data = await response.json();

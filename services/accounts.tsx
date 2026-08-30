@@ -1,9 +1,10 @@
 //This manages communication functions from front to back end
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const URL = "https://apirebottle.igrejapp.com.br/"
+//const URL = "https://apirebottle.igrejapp.com.br/"
 const DEFMESSAGE = "Server Error, attempt again later";
-//const URL = "http://192.168.86.24:5000/"
+//const URL = "http://192.168.86.21:5000/"
+const URL = "https://apirebottle.igrejapp.com.br/";
 // const URL = "https://44.192.65.155:8443//";
 
 //User only
@@ -123,9 +124,13 @@ export async function logUserPhone({phone, senha}:{phone:string, senha:string}) 
     if (data["response"] === true) {
       await AsyncStorage.setItem("tk", data['token']);
       await AsyncStorage.setItem("ptk", data['pertoken']);
-      await AsyncStorage.setItem("iscafe", 'false');
+      await AsyncStorage.setItem("iscafe", "false");
       await AsyncStorage.setItem("id", String(data.id));
-
+      console.log("WELCOME TO THE jungle")
+      console.log(
+  "iscafe AFTER SET:",
+  await AsyncStorage.getItem("iscafe")
+);
       
       return data;
     } else {
@@ -157,7 +162,13 @@ export async function logUserEmail({email, senha}:{email:string, senha:string}) 
     if (data["response"] === true) {
       await AsyncStorage.setItem("tk", data['token']);
       await AsyncStorage.setItem("ptk", data['pertoken']);
-      await AsyncStorage.setItem("iscafe", 'false');
+      await AsyncStorage.setItem("iscafe", "false");
+      await AsyncStorage.setItem("id", String(data.id));
+      console.log("WELCOME TO THE jungle")
+      console.log(
+  "iscafe AFTER SET:",
+  await AsyncStorage.getItem("iscafe")
+);
       return data;
     } else {
       return data["message"];
@@ -346,10 +357,15 @@ export async function logCafePhone({phone, senha}:{phone:string, senha:string}) 
 
     const data = await response.json();
 
-    if (data["response"] === true) {
+    if (data?.response === true) {
       await AsyncStorage.setItem("tk", data['token']);
       await AsyncStorage.setItem("ptk", data['pertoken']);
-      await AsyncStorage.setItem("iscafe", 'true');
+      await AsyncStorage.setItem("iscafe", "true");
+      console.log("WELCOME TO THE jungle")
+      console.log(
+  "iscafe AFTER SET:",
+  await AsyncStorage.getItem("iscafe")
+);
       await AsyncStorage.setItem("id", String(data.id));
       return data;
     } else {
@@ -381,9 +397,13 @@ export async function logCafeEmail({email, senha}:{email:string, senha:string}) 
     if (data["response"] === true) {
       await AsyncStorage.setItem("ptk", data['pertoken']);
       await AsyncStorage.setItem("tk", data['token']);
-      await AsyncStorage.setItem("iscafe", 'true');
+      await AsyncStorage.setItem("iscafe", "true");
       await AsyncStorage.setItem("id", String(data.id));
-      
+      console.log("WELCOME TO THE jungle")
+      console.log(
+  "iscafe AFTER SET:",
+  await AsyncStorage.getItem("iscafe")
+);
       return data;
     } else {
       return data["message"];
@@ -502,14 +522,23 @@ export async function fetchCred()  {
     
     let creds = await AsyncStorage.getItem("tk");
     let uid = await AsyncStorage.getItem("id");
-    let iscafe = await AsyncStorage.getItem("iscafe");
-    console.log("Issues with the thing")
+    let iscafe = await AsyncStorage.getItem("iscafe") == "1" ? "true":"false";
+
+    if(creds == null)
+      {
+        return [false]
+      }
+    
     let sesscheck = await sessionCheck()
+
     console.log(sesscheck)
     if (sesscheck == false)
     {
+      console.log("crux")
       return [false];
+      
     }
+    console.log([true,creds,uid,iscafe])
     return [true,creds,uid,iscafe];
   }
   catch{

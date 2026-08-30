@@ -1,11 +1,11 @@
 //This manages communication functions from front to back end
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-//const URL = "http://192.168.86.24:5000/"
-const URL = "https://apirebottle.igrejapp.com.br/"
+//const URL = "http://192.168.86.21:5000/"
+//const URL = "https://apirebottle.igrejapp.com.br/"
+const URL = "https://apirebottle.igrejapp.com.br/";
 const DEFMESSAGE = "Server Error, attempt again later";
-//const URL = "http://192.168.86.33:5000/"
-// const URL = "https://44.192.65.155:8443//";
+
 
 export async function getUserRatings()  {
   let credentials = await AsyncStorage.getItem("tk");

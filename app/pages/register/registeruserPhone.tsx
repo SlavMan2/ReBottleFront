@@ -66,6 +66,16 @@ export default function RegisterUserPhone() {
     phone: string,
     carr: string
   ) {
+    const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+    
+    if (!phoneRegex.test(phone))
+    {
+      setMessage(
+        'Please enter a valid phone format'
+      );
+
+      return;
+    }
     let handler = null;
 
     let hasn = false;

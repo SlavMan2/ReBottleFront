@@ -69,6 +69,16 @@ export default function RegisterCafePhone() {
     let hasm = false;
 
     // PASSWORD MATCH CHECK
+
+    const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+    if (!phoneRegex.test(phone))
+    {
+      setMessage(
+        'Please enter a valid phone format'
+      );
+
+      return;
+    }
     if (senha !== otpassw) {
       setMessage(
         'Passwords do not match'

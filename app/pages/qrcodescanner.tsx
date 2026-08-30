@@ -40,7 +40,7 @@ export default function App() {
       if(response[0] == false){
         redirect('/pages/login')
       } 
-      if (response[3] == "0"){
+      if (response[3] == "false"){
         redirect('/pages/qrcoderender')
       }
       const id = response[2]
@@ -172,7 +172,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f3f4f6",
-    paddingTop: 50,
   },
 
   header: {
