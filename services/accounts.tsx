@@ -524,11 +524,10 @@ export async function fetchCred()  {
     let uid = await AsyncStorage.getItem("id");
     let iscafe = await AsyncStorage.getItem("iscafe") == "1" ? "true":"false";
 
-    console.log("Issues with the thing")
-    console.log(
-  "iscafe AFTER SET:",
-  await AsyncStorage.getItem("iscafe")
-);
+    if(creds == null)
+      {
+        return [false]
+      }
     
     let sesscheck = await sessionCheck()
 
