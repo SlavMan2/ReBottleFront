@@ -10,8 +10,9 @@ import { Link, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchCred, logOut } from '@/services/accounts';
 import { getCafeData, getCafeHistory, getUserData, getUserHistory } from '@/services/datafetch';
-import { listBadges } from '@/services/functionalities';
+import { getRegistryList, listBadges } from '@/services/functionalities';
 import OrIsIt from '@/components/OrIsIt';
+import CodeCard from '@/components/CodeCard';
 
 export default function HomeScreen() {
   const [nome, setTextInputValue] = React.useState('');
@@ -50,8 +51,8 @@ export default function HomeScreen() {
             setTextInputValue(udata.name)
           
             setuimg(udata.image)
-            let instan:any = await getUserHistory()
-            setListInter(instan.instances)
+            let instan:any = await getRegistryList()
+            setListInter(instan.list)
             console.log(instan)
           } else 
           {
@@ -64,8 +65,8 @@ export default function HomeScreen() {
             setuimg(udata.image)
             setRating(Number(udata.rating || 0))
             setAdress(udata.adress)
-            let instan:any = await getCafeHistory()
-            setListInter(instan.instances)
+            let instan:any = await getRegistryList()
+            setListInter(instan.list)
           }
         
         }
@@ -108,18 +109,10 @@ export default function HomeScreen() {
                 </View>
               </View>
         <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Recent Activity</Text>
+                <Text style={styles.sectionTitle}>Promotion Codes</Text>
         
                 {listInter?.map((item:any, i:number) => (
-                          <View key={i} style={styles.activityRow}>
-                            <Image
-                            source={{ uri: item.image }}
-                            style={styles.profileImage}
-                          />
-                           <Text>{item.date}</Text>
-                            <Text>{item.cname}</Text>
-                            <Text style={{ color: 'green' }}>+{item.amount*10} pts</Text>
-                          </View>
+                          <CodeCard code={item.code} id={item.id} name={item.name} image={item.img} iscafe={iscafe} message={item.message} value={item.value}></CodeCard>
                         ))}
         </View>
     </ScrollView>

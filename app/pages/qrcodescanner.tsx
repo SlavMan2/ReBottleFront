@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Text,
   View,
@@ -22,8 +22,10 @@ export default function App() {
   const [scanned, setScanned] = useState(false);
   const [name, setName] = useState('');
   const [errmsg, setErrMsg] = useState('');
+  const [usermessage, setUserMessage] = useState('');
   const [adress, setAdress] = useState('');
   const [cups, setCups] = useState(0);
+  const isProcessing = useRef(false);
   const [rating, setRating] = useState(0);
   const router = useRouter();
   
@@ -62,6 +64,14 @@ export default function App() {
   }, []);
 
   const handleBarcodeScanned = ({ data }: { data: string }) => {
+    if (isProcessing.current) {
+    return;
+    }
+
+    isProcessing.current = true;
+    setScanned(true);
+    setErrMsg('');
+    setUserMessage('');
     setScanned(true);
     const URLid = data;
     const scanfunc = async () => {
@@ -69,6 +79,10 @@ export default function App() {
       console.log(URLid)
     if (res.response == true){
       setScanned(true);
+      if(res.hasnew == true)
+        {
+          setUserMessage("The user has just obtained a discount code, please notify them")
+        }
     }
     else{
       setErrMsg(res.message)
@@ -77,7 +91,7 @@ export default function App() {
   }
     scanfunc()
     console.log("QR VALUE:", data);
-
+    isProcessing.current = false;
     // Example:
     // redeemCustomer(data);
   };
@@ -129,7 +143,8 @@ export default function App() {
       {/* Scanner Section */}
       <View style={styles.scanContainer}>
         <Text style={styles.scanTitle}>Scan Customer</Text>
-
+        {usermessage && <Text style={styles.scanTitle2}>{usermessage}</Text>}
+        {usermessage && <Text style={styles.scanTitle3}>{errmsg}</Text>}
         <View style={styles.scannerBox}>
           <CameraView
             onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
@@ -235,6 +250,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     marginBottom: 15,
+  },
+  scanTitle2: {
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 15,
+    backgroundColor: "#8ee75a",
+    borderRadius: 5,
+    width: '85%'
+  },
+  scanTitle3: {
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 15,
+    backgroundColor: "#c53b39",
+    borderRadius: 5
   },
 
   scannerBox: {
