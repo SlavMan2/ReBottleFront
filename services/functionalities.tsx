@@ -3,7 +3,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //const URL = "http://192.168.86.21:5000/"
 //const URL = "https://apirebottle.igrejapp.com.br/"
-const URL = "http://10.0.0.22:5000/"
+//const URL = "http://10.0.0.22:5000/"
+const URL = "https://apirebottle.igrejapp.com.br/"
 const DEFMESSAGE = "Server Error, attempt again later";
 
 
