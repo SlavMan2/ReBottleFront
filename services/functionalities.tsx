@@ -3,9 +3,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //const URL = "http://192.168.86.21:5000/"
 //const URL = "https://apirebottle.igrejapp.com.br/"
-const URL = "http://192.168.86.21:5000/"
+const URL = "http://10.0.0.22:5000/"
 const DEFMESSAGE = "Server Error, attempt again later";
 
+
+//Ratings
+//Ratings
+//Ratings
 
 export async function getUserRatings()  {
   let credentials = await AsyncStorage.getItem("tk");
@@ -64,6 +68,10 @@ export async function submitUserRatings({id,desc,rat}:{id:string,desc:string,rat
   }
 }
 
+//Leaderboards/Scans
+//Leaderboards/Scans
+//Leaderboards/Scans
+
 export async function fetchLeaderboardData()  {
   let credentials = await AsyncStorage.getItem("tk");
   try {
@@ -120,6 +128,11 @@ export async function scanUser({URLid}:{URLid:string})  {
     return DEFMESSAGE;
   }
 }
+
+//Badges
+//Badges
+//Badges
+
 export async function listBadges()  {
   let credentials = await AsyncStorage.getItem("tk");
   try {
@@ -184,6 +197,104 @@ export async function getCafeOnboardingLink()  {
       },
       body: JSON.stringify({
         tk:credentials,
+      }),
+    });
+
+    const data = await response.json();
+
+    return data
+  } catch (error) {
+    console.error("Erro na requisição:", error);
+    return DEFMESSAGE;
+  }
+}
+
+//Registries
+//Registries
+//Registries
+
+export async function getCafeThreshold()  {
+  let credentials = await AsyncStorage.getItem("tk");
+  try {
+    const response = await fetch(URL + "getcafethreshold", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        tk:credentials,
+      }),
+    });
+
+    const data = await response.json();
+
+    return data
+  } catch (error) {
+    console.error("Erro na requisição:", error);
+    return DEFMESSAGE;
+  }
+}
+export async function getRegistryList()  {
+  let credentials = await AsyncStorage.getItem("tk");
+  try {
+    const response = await fetch(URL + "getregistrylist", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        tk:credentials,
+      }),
+    });
+
+    const data = await response.json();
+
+    return data
+  } catch (error) {
+    console.error("Erro na requisição:", error);
+    return DEFMESSAGE;
+  }
+}
+export async function clearRegistry({id}:{id:string})  {
+  let credentials = await AsyncStorage.getItem("tk");
+  try {
+    const response = await fetch(URL + "clearregistry", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        tk:credentials,
+        id:id
+      }),
+    });
+
+    const data = await response.json();
+
+    return data
+  } catch (error) {
+    console.error("Erro na requisição:", error);
+    return DEFMESSAGE;
+  }
+}
+export async function editCafeThreshold({cup_amount,ispercentage,value,message}:{cup_amount:any,ispercentage:any,value:any,message:string})  {
+  let credentials = await AsyncStorage.getItem("tk");
+  try {
+    const response = await fetch(URL + "editcafethreshold", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        tk:credentials,
+        cup_amount:cup_amount,
+        ispercentage:ispercentage,
+        value:value,
+        message:message,
       }),
     });
 

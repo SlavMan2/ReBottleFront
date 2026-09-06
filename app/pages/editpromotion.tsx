@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet ,View,ScrollView, Text,TouchableOpacity} from 'react-native';
+import { Platform, TextInput,StyleSheet ,View,ScrollView,Switch, Text,TouchableOpacity} from 'react-native';
 import React, { useEffect } from 'react';
 import { HelloWave } from '@/components/hello-wave';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
@@ -8,22 +8,32 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Link, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { fetchCred, logOut } from '@/services/accounts';
+import { fetchCred, logOut, updateCafe, updateUser } from '@/services/accounts';
 import { getCafeData, getCafeHistory, getUserData, getUserHistory } from '@/services/datafetch';
-import { listBadges } from '@/services/functionalities';
+import { editCafeThreshold, getCafeThreshold, listBadges } from '@/services/functionalities';
 import OrIsIt from '@/components/OrIsIt';
-import { isColor } from 'react-native-reanimated';
+import ImagePickerButton from '@/components/ImagePickerButton';
 
 export default function HomeScreen() {
-  const [nome, setTextInputValue] = React.useState('');
-  const [iscafe, setIsCafe] = React.useState(false);
-  const [cups, setCups] = React.useState(0);
+  
+  const [id,setId] = React.useState(0);
   const [badge, setBadge] = React.useState('None');
-  const [rating, setRating] = React.useState(0);
+   const [rating, setRating] = React.useState(0);
   const [adress, setAdress] = React.useState('');
   const [userimg, setuimg] = React.useState('');
-  const [id,setId] = React.useState(0);
+  const [nomes, setNomes] = React.useState('');
+  const [oldpromotion, setOldPromotion] = React.useState('');
+  const [olddesc, setOldDesc] = React.useState('');
+  
   const [errmsg, setErrMsg] = React.useState('');
+  const [iscafe, setIsCafe] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+
+  const [cup_amount, setCupAmount] = React.useState('0');
+  const [ispercentage, setIsPercentage] = React.useState(false);
+  const [value, setValue] = React.useState('0');
+  const [message, setMessage] = React.useState('');
+
   const router = useRouter();
   let redirect = (route:any) => {
     router.push(route);
@@ -31,7 +41,30 @@ export default function HomeScreen() {
   let redirect2 = (route:any,id:any,name:any) => {
     router.push({pathname:route,params:{ uid: id,name:name }});
   }
-  
+  const handleSave = async () => {
+    setLoading(true);
+    let res;
+    if (iscafe == false){
+      redirect('/pages/settings')
+    } else {
+      res = await editCafeThreshold({
+        cup_amount,
+        ispercentage,
+        value,
+        message
+      });
+      console.log(res)
+      console.log("RARA")
+    }
+    setLoading(false);
+    console.log(res)
+    if (res.response === true) {
+      redirect('/'); // go back to profile
+    } else {
+      setErrMsg(res.message)
+      console.log(res);
+    }
+  };
   useEffect(() => {
     async function yahoo()
     {
@@ -42,37 +75,27 @@ export default function HomeScreen() {
         console.log(response)
         if (response[3] == "false")
         {
-          console.log("A")
-            setIsCafe(false)
-            let id = response[2]
-            setId(id)
-          let udata = await getUserData({id})
-          console.log(udata)
-          setTextInputValue(udata.name)
-          setCups(udata.cups_saved)
-          setuimg(udata.image)
-          let instan:any = await getUserHistory()
-          console.log(instan)
+          redirect('/pages/settings')
         } else 
         {
           setIsCafe(true)
           let id = response[2]
           setId(id)
           let udata:any = await getCafeData({id})
-          setTextInputValue(udata.name)
-          setCups(udata.cups_saved)
+          setNomes(udata.name)
+          setOldDesc(udata.desc)
+          setOldPromotion(udata.promotion)
           setuimg(udata.image)
           setRating(Number(udata.rating || 0))
           setAdress(udata.adress)
-          let instan:any = await getCafeHistory()
+          
+          let udata2:any = await getCafeThreshold()
+          setCupAmount(udata2.cup_amount)
+          setIsPercentage(udata2.is_percentage)
+          setMessage(udata2.message)
+          setValue(udata2.value)          
+          //
         }
-        let badge:any = await listBadges()
-        let bl = badge?.list ?? [];
-        console.log(bl)
-        if (bl.length   > 0){
-          setBadge(bl[bl.length  -1][1])
-        }
-        
       }
       
     }
@@ -93,7 +116,7 @@ export default function HomeScreen() {
       )}
     </View>
 
-    <Text style={styles.name}>{nome}</Text>
+    <Text style={styles.name}>{nomes}</Text>
 
     {!iscafe ? (
       <Text style={styles.location}>User</Text>
@@ -101,7 +124,8 @@ export default function HomeScreen() {
       <>
         <Text style={styles.location}>📍 {adress}</Text>
         <Text style={styles.location}>⭐ {rating.toFixed(1)}</Text>
-        
+        <Text style={styles.location}>Description: {olddesc}</Text>
+        <Text style={styles.location}>🎁 {oldpromotion}</Text>
       </>
     )}
 
@@ -115,98 +139,82 @@ export default function HomeScreen() {
     </View>
   </View>
 
-  {/* STATS */}
-  <View style={styles.statsContainer}>
-    <View style={styles.statBox}>
-      <Text style={styles.statNumber}>{cups}</Text>
-      <Text>Cups Saved</Text>
-    </View>
-
-    <View style={styles.statBox}>
-      <Text style={styles.statNumber}>{cups * 10}</Text>
-      <Text>Points</Text>
-    </View>
-
-    <View style={styles.statBox}>
-      <Text style={styles.statNumber}>{cups}</Text>
-      <Text>Reuses</Text>
-    </View>
-  </View>
-
+  <OrIsIt text={errmsg}/>
   {/* MENU */}
-  <View style={styles.menu}>
-    {!iscafe && <TouchableOpacity
-      style={styles.menuItem}
-      onPress={() =>
-        router.push({
-          pathname: '/pages/qrcoderender',
-          params: { uid: id},
-        })
-      }
-    >
-      <Text style={styles.menuText}>My QR Code</Text>
-      <Text>{'>'}</Text>
-    </TouchableOpacity>}
-    {iscafe && <TouchableOpacity
-      style={styles.menuItem}
-      onPress={() =>
-        router.push({
-          pathname: '/pages/editpromotion',
-          params: { uid: id},
-        })
-      }
-    >
-      <Text style={styles.menuText}>Edit My Promotion Settings</Text>
-      <Text>{'>'}</Text>
-    </TouchableOpacity>}
+  <View style={styles.form}>
+        
+        <Text style={styles.label}>Value</Text>
+        <TextInput
+          style={styles.input}
+          value={(value||'0').toString()}
+          onChangeText={setValue}
+          placeholder="Enter value"
+          keyboardType="decimal-pad"
+        />
+        
+        <Text style={styles.label}>Message</Text>
+        <TextInput
+          style={styles.input}
+          value={message}
+          onChangeText={setMessage}
+          placeholder="Enter value"
+        />
 
-    <TouchableOpacity
-      style={styles.menuItem}
-      onPress={() => redirect('/pages/badges')}
-    >
-      <Text style={styles.menuText}>My Badges</Text>
-      <Text>{'>'}</Text>
-    </TouchableOpacity>
+        <Text style={styles.label}>Cup Amount</Text>
+        <TextInput
+          style={styles.input}
+          value={(cup_amount||'0').toString()}
+          onChangeText={setCupAmount}
+          placeholder="Enter value"
+          keyboardType="numeric"
+        />
 
-    <TouchableOpacity
-      style={styles.menuItem}
-      onPress={() => redirect('/pages/history')}
-    >
-      <Text style={styles.menuText}>Scan History</Text>
-      <Text>{'>'}</Text>
-    </TouchableOpacity>
+        <Text style={styles.label}>Use Percentage</Text>
+        <Switch
+          value={ispercentage}
+          onValueChange={setIsPercentage}
+        />
+      </View>
 
-    <TouchableOpacity
-      style={styles.menuItem}
-      onPress={() => redirect('/pages/settings')}
-    >
-      <Text style={styles.menuText}>Settings</Text>
-      <Text>{'>'}</Text>
-    </TouchableOpacity>
+      {/* SAVE BUTTON */}
+      <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+        <Text style={styles.saveText}>
+          {loading ? 'Saving...' : 'Save Changes'}
+        </Text>
+      </TouchableOpacity>
 
-      {/*iscafe && <TouchableOpacity
-      style={styles.menuItem}
-      onPress={() => redirect2('/pages/payment/striperetreival',id,nome)}
-      >
-      <Text style={styles.menuText}>Stripe OnBoarding</Text>
-      <Text>{'>'}</Text>
-    </TouchableOpacity>*/}
-
-    <TouchableOpacity
-      style={styles.menuItem}
-      onPress={() => {
-        logOut();
-        router.push('/pages/login')}}
-    >
-      <Text style={[styles.menuText, { color: 'red' }]}>Sign Out</Text>
-      <Text>{'>'}</Text>
-    </TouchableOpacity>
-  </View>
 
 </ScrollView>
   );
 }
 const styles = StyleSheet.create({
+  input: {
+    backgroundColor: 'white',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 15,
+  },
+
+  saveButton: {
+    backgroundColor: '#2f80ed',
+    margin: 20,
+    padding: 15,
+    borderRadius: 15,
+    alignItems: 'center',
+  },
+
+  saveText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  form: {
+    margin: 20,
+  },
+
+  label: {
+    marginBottom: 5,
+    fontWeight: 'bold',
+  },
   container: {
     flex: 1,
     backgroundColor: '#f2f4f7',

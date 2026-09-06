@@ -207,6 +207,10 @@ export default function HomeScreen() {
           <TouchableOpacity style={styles.actionBox} onPress={() => redirect('/pages/nearbycafes')}>
             <Text>Nearby Cafés</Text>
           </TouchableOpacity>}
+          
+          <TouchableOpacity style={styles.actionBox} onPress={() => redirect('/pages/codes')}>
+            <Text>My Promotion Codes</Text>
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -476,6 +480,11 @@ card2: {
   position: 'absolute',
   top: 20,
   right: 20,
+},
+profileButton2: {
+  position: 'absolute',
+  top: 20,
+  right: 70,
 },
 
 profileImage: {
