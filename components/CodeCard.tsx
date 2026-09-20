@@ -1,7 +1,7 @@
 // CafeCard.tsx
 
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity,ScrollView } from "react-native";
 import Button from "./Button";
 import { clearRegistry } from "@/services/functionalities";
 
@@ -36,18 +36,27 @@ export default function CodeCard({name, id, code, image,iscafe,value,message}: P
     };
   return (
     <View style={styles.activityRow}>
-      <Image
-      source={{ uri: image }}
-      style={styles.profileImage}
-      />
-      <View
-      
-      >
-        <Text style={styles.text2}>Code: {code}</Text>
-        <Text style={styles.text2}>{iscafe && "User name: "}{!iscafe && "Cafe name: "}{name}</Text>
-        <Text style={styles.text2}>{message}</Text>
-        <Text style={styles.text2}>Discount Value: {value}</Text>
+      <View style={styles.imageBlock}>
+        <Image
+        source={{ uri: image }}
+        style={styles.profileImage}
+        />
       </View>
+      
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={true}
+        style={styles.infoScroll}
+        contentContainerStyle={styles.infoContainer}
+      >
+        {
+          // style={styles.text2}
+        }
+        <Text>Code: {code}</Text>
+        <Text>{iscafe && "User name: "}{!iscafe && "Cafe name: "}{name}</Text>
+        <Text>{message}</Text>
+        <Text>Discount Value: {value}</Text>
+      </ScrollView>
       {iscafe && <TouchableOpacity
         style={[
           styles.button,
@@ -67,14 +76,15 @@ export default function CodeCard({name, id, code, image,iscafe,value,message}: P
 
 const styles = StyleSheet.create({
   activityRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: 'white',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "white",
     padding: 15,
     borderRadius: 15,
     marginBottom: 10,
   },
    button: {
+    flex: 0.5,
     backgroundColor: '#2f80ed',
     padding: 10,
     borderRadius: 10,
@@ -84,7 +94,14 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
+    imageBlock: {
+    flex: 0.5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
 profileImage: {
+  
   width: 40,
   height: 40,
   borderRadius: 20,
@@ -100,5 +117,14 @@ profileImage: {
   },
   text2: {
     fontSize:12
+  },
+  infoScroll: {
+    flex: 1,
+  },
+
+  infoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 20,
   },
 });
